@@ -1,28 +1,110 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Amor e Confusão no Colégio</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amor e Confusão no Colégio - Fanfic Interativa</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💕</text></svg>">
 </head>
 <body>
-  <div class="book-bg">
-    <div class="container" id="story-container" style="display:none;"></div>
-    <div class="container book-cover" id="cover-container">
-      <div class="cover-art">
-        <img src="/img/_74e34a92-b5a4-4b9c-a91d-ff69cca569df.jpg" alt="Capa do livro Amor e Confusão no Colégio" style="width:100%; border-radius:12px; box-shadow:0 2px 12px #0007; margin-bottom: 18px;">
-        <div class="cover-title">Amor e Confusão no Colégio</div>
-        <div class="cover-author">por Wendriely,Lucas</div>
-      </div>
-      <div class="cover-prologo">
-        <b>Prólogo</b><br>
-        No Colégio Estrela do Saber, paixões, segredos e escolhas ousadas mudam destinos. Entre risos, desafios e corações acelerados, cada decisão pode transformar tudo. Pronto para viver essa história?
-      </div>
-      <button class="start-btn" onclick="startBook()">Começar leitura</button>
+    <!-- Efeito de partículas -->
+    <div class="particles"></div>
+    
+    <!-- Container principal -->
+    <div class="container">
+        <!-- Capa do livro -->
+        <div class="book-cover" id="cover-container">
+            <div class="cover-art">
+                <img src="img/capa.jpeg" alt="Capa do livro Amor e Confusão no Colégio" class="cover-image">
+                <div class="cover-overlay"></div>
+            </div>
+            <div class="cover-content">
+                <div class="cover-title">Amor e Confusão no Colégio</div>
+                <div class="cover-subtitle">Uma história de paixões, segredos e escolhas</div>
+                <div class="cover-author">por Wendriely & Lucas</div>
+                <div class="cover-stats">
+                    <span class="stat">📖 4 Capítulos</span>
+                    <span class="stat">💕 16 Finais</span>
+                    <span class="stat">🎭 Interativo</span>
+                </div>
+                <button class="start-btn" onclick="startBook()">
+                    <span class="btn-text">Começar a História</span>
+                    <span class="btn-icon">📖</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Container da história -->
+        <div id="story-container" style="display:none;">
+            <!-- Conteúdo será inserido via JavaScript -->
+        </div>
     </div>
-    <div class="book-footer">Amor e Confusão no Colégio &mdash; Fanfic Interativa</div>
-  </div>
-  <script src="script.js"></script>
+
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Carregando sua história...</div>
+    </div>
+
+    <!-- Script principal -->
+    <script src="script.js"></script>
+    
+    <!-- Script de efeitos visuais -->
+    <script>
+        // Efeito de partículas
+        function createParticles() {
+            const particles = document.querySelector('.particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        // Efeito de digitação
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Inicializar efeitos
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Mostrar loading inicial
+            document.getElementById('loading').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('cover-container').style.display = 'block';
+            }, 2000);
+        });
+
+        // Efeito de hover nos botões
+        document.addEventListener('mouseover', function(e) {
+            if (e.target.classList.contains('choice-btn')) {
+                e.target.style.transform = 'translateY(-5px) scale(1.03)';
+            }
+        });
+
+        document.addEventListener('mouseout', function(e) {
+            if (e.target.classList.contains('choice-btn')) {
+                e.target.style.transform = 'translateY(0) scale(1)';
+            }
+        });
+    </script>
 </body>
 </html>

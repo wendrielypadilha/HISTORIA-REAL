@@ -2,7 +2,6 @@
 const chapters = [
   {
     title: "Capítulo 1: O Jogo das Paixões",
-    img: "/img/cap 1.jpg",
     text: `O sinal tocou, anunciando o início de mais um dia no Colégio Estrela do Saber. Lucas, loiro de olhos castanhos melados e presidente do grêmio, caminhava com confiança. Ao seu lado, Wendriely, ruiva de batom vermelho, desviava olhares cobiçosos com um suspiro de tédio—até que algo (ou melhor, alguém) chamou sua atenção.<br><br>
 Toninho, o primo bombado, passou por eles com uma bolsa de jiu-jitsu no ombro, suor brilhando no pescoço. Wendriely travou—literalmente—e seu caderno caiu no chão.<br><br>
 Enquanto isso, Lucas via Gustavo, o garanhão do vôlei, se aproximando com um grupo de amigos.<br><br><b>O que acontece agora?</b>`,
@@ -15,15 +14,6 @@ Enquanto isso, Lucas via Gustavo, o garanhão do vôlei, se aproximando com um g
   },
   {
     title: "Capítulo 2: Jogadas Arriscadas",
-    img: (state) => {
-      if (state.rota === 'lucas') return '/img/cap 2.1.jpg';
-      if (state.rota === 'wendriely') return '/img/cap2.2.jpg';
-      if (state.rota === 'pai') return '/img/cap2.3.jpg';
-      if (state.rota === 'fuga') return '/img/cap2.4.jpg';
-      if (state.rota === 'lucas_sigilosa') return '/img/primeira1.jpg';
-      if (state.rota === 'lucas_verdade') return '/img/primeira 2.jpg';
-      return null;
-    },
     text: (state) => {
       switch(state.rota) {
         case 'lucas':
@@ -40,22 +30,22 @@ Enquanto isso, Lucas via Gustavo, o garanhão do vôlei, se aproximando com um g
       switch(state.rota) {
         case 'lucas':
           return [
-            { text: 'Inventa que é sigilosa: "Só os mais importantes foram chamados."', next: 2, state: { rota: 'lucas_sigilosa' }, img: '/img/primeira1.jpg' },
-            { text: 'Fala a verdade: "É que eu queria te ver sozinho."', next: 2, state: { rota: 'lucas_verdade' }, img: '/img/primeira 2.jpg' }
+            { text: 'Inventa que é sigilosa: "Só os mais importantes foram chamados."', next: 2, state: { rota: 'lucas_sigilosa' } },
+            { text: 'Fala a verdade: "É que eu queria te ver sozinho."', next: 2, state: { rota: 'lucas_verdade' } }
           ];
         case 'wendriely':
           return [
-            { text: 'Insiste em limpar: "Eu causei, eu conserto!"', next: 2, state: { rota: 'wendriely_insiste' }, img: '/img/cap2.2.jpg' },
+            { text: 'Insiste em limpar: "Eu causei, eu conserto!"', next: 2, state: { rota: 'wendriely_insiste' } },
             { text: 'Provoca: "Tem medo de eu ver seu tanquinho?"', next: 2, state: { rota: 'wendriely_provoca' } }
           ];
         case 'pai':
           return [
-            { text: 'Lucas aceita a carona, mas Wendriely puxa ele pra trás.', next: 2, state: { rota: 'pai_lucas' }, img: '/img/cap2.3.jpg' },
+            { text: 'Lucas aceita a carona, mas Wendriely puxa ele pra trás.', next: 2, state: { rota: 'pai_lucas' } },
             { text: 'Gustavo provoca: "Tá afim do pai ou do filho, Lucas?"', next: 2, state: { rota: 'pai_gustavo' } }
           ];
         case 'fuga':
           return [
-            { text: 'Wendriely finge que Toninho a assediou pra forçar um acidente romântico.', next: 2, state: { rota: 'fuga_assedio' }, img: '/img/cap2.4.jpg' },
+            { text: 'Wendriely finge que Toninho a assediou pra forçar um acidente romântico.', next: 2, state: { rota: 'fuga_assedio' } },
             { text: 'Pedem conselhos pro pai de Toninho (sim, ele atende no banheiro).', next: 2, state: { rota: 'fuga_conselho' } }
           ];
       }
@@ -63,7 +53,6 @@ Enquanto isso, Lucas via Gustavo, o garanhão do vôlei, se aproximando com um g
   },
   {
     title: "Capítulo 3: Segredos e Tretas",
-    img: "[Espaço para imagem de tensão ou romance]",
     text: (state) => {
       switch(state.rota) {
         case 'lucas_sigilosa':
@@ -131,7 +120,6 @@ Enquanto isso, Lucas via Gustavo, o garanhão do vôlei, se aproximando com um g
   },
   {
     title: "Capítulo 4: Finais e Revelações",
-    img: "[Espaço para imagem do clímax]",
     text: (state) => {
       // Finais dramáticos e trágicos
       const finais = {
@@ -163,52 +151,123 @@ Enquanto isso, Lucas via Gustavo, o garanhão do vôlei, se aproximando com um g
 let currentChapter = 0;
 let currentState = {};
 
+// IMAGENS UTILIZADAS:
+// - img/capa.jpeg (Capa)
+
 function startBook() {
   document.getElementById('cover-container').style.display = 'none';
   document.getElementById('story-container').style.display = '';
   renderChapter();
 }
 
-// Modificar renderChapter para NÃO mostrar botão de compartilhar no final
+// Renderizar capítulo sem imagens (apenas texto)
 function renderChapter() {
   const chapter = chapters[currentChapter];
-  let imgContent = '';
-  // Verifica se há imagem na escolha atual
-  let currentChoiceImg = null;
-  if (typeof chapter.choices === 'function' && currentState && currentState.rota) {
-    const choices = chapter.choices(currentState);
-    if (currentState.lastChoiceImg) {
-      currentChoiceImg = currentState.lastChoiceImg;
-    }
-  }
-  let chapterImg = typeof chapter.img === 'function' ? chapter.img(currentState) : chapter.img;
-  if (currentChoiceImg) {
-    imgContent = `<img src="${currentChoiceImg}" alt="Imagem do capítulo" style="max-width:100%; max-height:170px; display:block; margin:auto; border-radius:10px;">`;
-  } else if (chapterImg) {
-    imgContent = `<img src="${chapterImg}" alt="Imagem do capítulo" style="max-width:100%; max-height:170px; display:block; margin:auto; border-radius:10px;">`;
-  }
+  
   let text = typeof chapter.text === 'function' ? chapter.text(currentState) : chapter.text;
   let choices = typeof chapter.choices === 'function' ? chapter.choices(currentState) : chapter.choices;
+  
+  // Adicionar efeito de loading
   document.getElementById('story-container').innerHTML = `
-    <h1>Amor e Confusão no Colégio</h1>
-    <h2>${chapter.title}</h2>
-    <div class="image-placeholder">${imgContent}</div>
-    <div class="chapter">${text}</div>
-    <div class="choices">
-      ${choices.map((c, i) => `<button class="choice-btn" onclick="chooseWithImg(${i})">${c.text}</button>`).join('')}
+    <div class="loading-chapter">
+      <div class="loading-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
-    ${currentChapter === chapters.length-1 ? '<div class="ate-proximo">Até o próximo livro!</div>' : ''}
   `;
+  
+  // Simular carregamento e depois mostrar conteúdo
+  setTimeout(() => {
+    document.getElementById('story-container').innerHTML = `
+      <div class="chapter-header">
+        <h1>Amor e Confusão no Colégio</h1>
+        <h2>${chapter.title}</h2>
+        <div class="chapter-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${((currentChapter + 1) / chapters.length) * 100}%"></div>
+          </div>
+          <span class="progress-text">Capítulo ${currentChapter + 1} de ${chapters.length}</span>
+        </div>
+      </div>
+      <div class="chapter-content">
+        <div class="chapter">${text}</div>
+        <div class="choices">
+          ${choices.map((c, i) => `
+            <button class="choice-btn" onclick="chooseWithImg(${i})" data-choice="${i}">
+              <span class="choice-number">${i + 1}</span>
+              <span class="choice-text">${c.text}</span>
+            </button>
+          `).join('')}
+        </div>
+        ${currentChapter === chapters.length-1 ? '<div class="ate-proximo">🎉 Parabéns! Você completou a história! 🎉</div>' : ''}
+      </div>
+    `;
+    
+    // Texto aparece normalmente sem efeito de digitação
+    const chapterText = document.querySelector('.chapter');
+    if (chapterText) {
+      chapterText.style.opacity = '0';
+      setTimeout(() => {
+        chapterText.style.opacity = '1';
+      }, 100);
+    }
+  }, 800);
 }
 
-// Nova função para passar a imagem da escolha
+// Função de digitação
+function typeWriter(element, text, speed = 50) {
+  let i = 0;
+  element.innerHTML = '';
+  function type() {
+    if (i < text.length) {
+      element.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    }
+  }
+  type();
+}
+
+// Função para processar texto com HTML
+function processTextWithHTML(text) {
+  // Substituir <br> por quebras de linha reais
+  text = text.replace(/<br>/g, '\n');
+  // Substituir tags HTML por texto simples
+  text = text.replace(/<b>(.*?)<\/b>/g, '$1');
+  text = text.replace(/<i>(.*?)<\/i>/g, '$1');
+  return text;
+}
+
+// Função para escolher opção
 window.chooseWithImg = function(i) {
   const chapter = chapters[currentChapter];
   let choices = typeof chapter.choices === 'function' ? chapter.choices(currentState) : chapter.choices;
   const choice = choices[i];
-  currentChapter = choice.next;
-  currentState = { ...currentState, ...choice.state, lastChoiceImg: choice.img || null };
-  renderChapter();
+  
+  // Adicionar efeito de clique
+  const button = document.querySelector(`[data-choice="${i}"]`);
+  if (button) {
+    button.style.transform = 'scale(0.95)';
+    button.style.background = 'linear-gradient(135deg, #5a0711, #2d001a)';
+    setTimeout(() => {
+      button.style.transform = '';
+      button.style.background = '';
+    }, 200);
+  }
+  
+  // Transição suave
+  document.getElementById('story-container').style.opacity = '0';
+  
+  setTimeout(() => {
+    currentChapter = choice.next;
+    if (choice.state) {
+      currentState = { ...currentState, ...choice.state };
+    }
+    renderChapter();
+    document.getElementById('story-container').style.opacity = '1';
+  }, 300);
 }
 
 window.startBook = startBook;
